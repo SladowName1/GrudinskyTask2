@@ -1,0 +1,82 @@
+﻿@model IEnumerable<CustomIdentityApp.Models.User>
+
+@{
+    ViewBag.Title = "Список пользователей";
+}
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<form method="post" asp-controller="Account" asp-action="Logout">
+    <p>Hello, @User.Identity.Name</p>
+
+</form>
+<form method="post">
+    <table class="table table-striped thead-light">
+        <tr><th><input type="checkbox" class="all" data-id="d1" title="Выбрать все">Выделить всё</th><th>Email</th>@*<th>Status</th>*@
+        <th> <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteAll" name="button">
+                    Удалить выбранных
+                </button>
+            </th>
+        <th>
+            <button type="submit" class="btn btn-outline-warning btn-sm" asp-action="BlockAll" name="button">
+                Заблокировать выбранных
+            </button>
+        </th>
+        <th>
+            <button type="submit" class="btn btn-outline-success btn-sm" asp-action="UnblockAll" name="button">
+                Разблокировать выбранных
+            </button>
+        </th>
+        </tr>
+
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td><input type="checkbox" name="selectedUsers" id="@user.Id" value="@user.Id" class="one" data-id="d1"></td>
+                <td>@user.Email</td>
+
+                @*<td>@user.IsSelected</td>*@
+                <td>
+                        <button type="submit"asp-action="Delete" asp-route-id="@user.Id"  class="btn btn-sm btn-outline-danger" name="button">
+                            Удалить
+                        </button>   
+                    
+
+                </td>
+                <td>
+
+                    
+                        <button type="submit"  asp-action="Blocked" asp-route-id="@user.Id" class="btn btn-outline-warning btn-sm" name="button">
+                            Заблокировать
+                        </button>
+                    
+
+                </td>
+                <td>
+
+                   
+                        <button type="submit" asp-action="Unblock" asp-route-id="@user.Id" class="btn btn-outline-success btn-sm" name="button">
+                            Разблокировать
+                        </button>
+                   
+
+                </td>
+
+            </tr>
+        }
+
+    </table>
+    <div class="cleared"></div>
+</form>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".all").on("change", function () {
+                var groupId = $(this).data('id');
+                $('.one[data-id="' + groupId + '"]').prop("checked", this.checked);
+            });
+
+            $(".one").on("change", function () {
+                var groupId = $(this).data('id');
+                var allChecked = $('.one[data-id="' + groupId + '"]:not(:checked)').length == 0;
+                $('.all[data-id="' + groupId + '"]').prop("checked", allChecked);
+            });
+        });
+    </script>

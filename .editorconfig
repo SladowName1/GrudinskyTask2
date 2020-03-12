@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA1062: Проверить аргументы или открытые методы
+dotnet_diagnostic.CA1062.severity = none
